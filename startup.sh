@@ -1,0 +1,49 @@
+#!/bin/bash
+#set -x
+
+echo 'Welcome to the Mollie Webshop Local Environment tool.'
+echo 'Here are the available webshops: '
+
+
+cd shops
+array=($(ls -d *))
+i=0
+
+# SHOW OPTIONS
+for OUTPUT in "${array[@]}"
+do
+    echo '['$i']' ${array[$i]}
+    i=$((i+1))
+done
+echo '['$i'] EXIT PROGRAM.'
+
+read -n1 -r -p "Press a number to continue: " num
+
+echo \
+
+if [ "$i" = "$num" ];
+then
+    echo 'Program shutting down...'
+    exit 0
+fi
+
+cd ./${array[$num]}
+if [ -f ./files/docker-compose.yml ]
+then
+    echo ${array[$num]} 'is already downloaded.'
+    ./${array[$num]}.sh
+else
+    echo ${array[$num]} 'is not downloaded.'
+    read -n1 -r -p "Would you like to download it? (y/n): " dwnld
+    echo $dwnld
+    if [ "$dwnld" = "y" ]; then
+        echo "Downloading ${array[$num]}..."
+        git clone https://github.com/SalimAtMollie/docker-${array[$num]}xMollie files #Download repo from github
+        echo "Downloaded ${array[$num]}"
+        ./${array[$num]}.sh #Go into the webshops bootstrap shell script
+    else
+        echo "Going back..."
+        cd ../
+        #./startup.sh
+    fi
+fi
