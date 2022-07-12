@@ -17,8 +17,10 @@ then #Oxid Is installed
         docker-compose up
     fi
     if [ "$num" = "2" ] || [ "$num" = "1" ]; then #Delete files
-        docker-compose down --rmi
-        docker rm $(docker ps -a -q)
+        cd ./files
+        docker-compose down -v
+        cd ../
+        #docker rm $(docker ps -a -q)
 
         echo '[!] For this to work. Please answer y for each override.'
         rm -r ./files
@@ -44,7 +46,7 @@ else #Oxid is not installed
         docker-compose up --build
     else
         echo "[!] Going back..."
-        cd ../
+        cd ../../
         ./startup.sh
     fi
 fi
