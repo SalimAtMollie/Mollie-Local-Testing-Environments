@@ -1,9 +1,12 @@
 #!/bin/bash
 #set -x
 
+
+echo '##### Welcome to the Mollie OXID Local Environment tool. ##### '
+
 if [ -f ./files/data/www/source/config.inc.php ];
 then #Oxid Is installed
-    echo '[!] Oxid is Installed. Please press a key:'
+    echo '[!] Oxid is Installed.'
     echo '[0]: Startup Oxid Webshop'
     echo '[1]: Re-install'
     echo '[2]: Delete'
@@ -15,6 +18,10 @@ then #Oxid Is installed
     if [ "$num" = "0" ]; then #Startup Oxid Webshop
         cd ./files
         docker-compose up
+
+        #This part executes when container is stopped
+        cd ../
+        ./oxid6.sh
     fi
     if [ "$num" = "2" ] || [ "$num" = "1" ]; then #Delete files
         cd ./files
@@ -43,6 +50,10 @@ else #Oxid is not installed
         echo "[!] Installing and running Oxid..."
         cd ./files
         docker-compose up --build
+
+        #This part executes when container is stopped
+        cd ../
+        ./oxid6.sh
     else
         echo "[!] Going back..."
         cd ../../
