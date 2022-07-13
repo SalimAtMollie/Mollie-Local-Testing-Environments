@@ -20,7 +20,6 @@ then #Oxid Is installed
         cd ./files
         docker-compose down -v
         cd ../
-        #docker rm $(docker ps -a -q)
 
         echo '[!] For this to work. Please answer y for each override.'
         rm -r ./files

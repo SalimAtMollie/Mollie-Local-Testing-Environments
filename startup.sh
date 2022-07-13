@@ -28,7 +28,7 @@ then
 fi
 
 cd ./${array[$num]}
-if [ -f ./files/docker-compose.yml ]
+if [ -f ./files/docker-compose.yml ] #Check if shop is Downloaded
 then
     echo '[!]' ${array[$num]} 'is already downloaded.'
     chmod u+x ./${array[$num]}.sh
@@ -37,7 +37,7 @@ else
     echo '[!]' ${array[$num]} 'is not downloaded.'
     read -n1 -r -p "[?] Would you like to download it? (y/n): " dwnld
     echo $dwnld
-    if [ "$dwnld" = "y" ]; then
+    if [ "$dwnld" = "y" ]; then #Download and run
         echo "[!] Downloading ${array[$num]}..."
         git clone https://github.com/SalimAtMollie/docker-${array[$num]}xMollie files #Download repo from github
         echo "[!] Downloaded ${array[$num]}"
