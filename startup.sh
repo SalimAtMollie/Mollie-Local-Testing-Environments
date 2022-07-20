@@ -43,7 +43,7 @@ else
     echo $dwnld
     if [ "$dwnld" = "y" ]; then #Download and run
         echo "[!] Downloading ${array[$num]}..."
-        git clone https://github.com/SalimAtMollie/docker-${array[$num]}xMollie files #Download repo from github
+        git clone https://github.com/SalimAtMollie/${array[$num]}xMollie files #Download repo from github
         echo "[!] Downloaded ${array[$num]}"
         chmod u+x ./${array[$num]}.sh
         ./${array[$num]}.sh #Go into the webshops bootstrap shell script

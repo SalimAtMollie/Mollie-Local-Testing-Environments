@@ -32,7 +32,7 @@ then #Oxid Is installed
         rm -r ./files
     fi
     if [ "$num" = "1" ]; then #Reinstall
-        git clone https://github.com/SalimAtMollie/docker-Oxid6xMollie files #Download repo from github
+        git clone https://github.com/SalimAtMollie/Oxid6xMollie files #Download repo from github
         cd ./files
         docker-compose up --build
     fi
