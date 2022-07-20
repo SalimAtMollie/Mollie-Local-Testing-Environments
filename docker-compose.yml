@@ -1,0 +1,68 @@
+version: '3'
+
+services:
+
+  traefik:
+    image: "traefik:v2.7"
+    container_name: "traefik"
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    networks:
+      - traefik-public
+      
+  mysql:
+    platform: 'linux/x86_64'
+    image: mysql:5.7
+    hostname: mysql.localhost
+    restart: always
+    volumes:
+      - ./data/mysql/:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: mysql
+      MYSQL_USER: mollie
+      MYSQL_PASSWORD: Mollie2022
+      MYSQL_ROOT_PASSWORD: DaZs82An!Hd3q#3uqdqB
+    labels:
+      - "traefik.enable=false"    
+    networks:
+      - traefik-public
+
+  mailhog:
+    hostname: mailhog.localhost
+    image: mailhog/mailhog:latest
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mailhog.rule=Host(`mailhog.localhost`)"
+      - "traefik.http.routers.mailhog.entrypoints=web"
+      - "traefik.http.routers.mailhog.tls=true"
+      - "traefik.http.services.mailhog.loadbalancer.server.port=8025"
+      - "traefik.docker.network=traefik-public"
+    networks:
+      - traefik-public
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.phpmyadmin.rule=Host(`myphpadmin.localhost`)"
+      - "traefik.http.routers.phpmyadmin.entrypoints=web"
+      - "traefik.http.routers.phpmyadmin.tls=true"
+      - "traefik.http.services.phpmyadmin.loadbalancer.server.port=80"
+      - "traefik.docker.network=traefik-public"
+    environment:
+      PMA_HOST: mysql
+    networks:
+      - traefik-public
+
+networks:
+    traefik-public:
+        name: traefik-public
+        driver: bridge

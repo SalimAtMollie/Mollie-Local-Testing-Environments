@@ -2,6 +2,8 @@
 #set -x
 
 echo '##### Welcome to the Mollie Webshop Local Environment tool. ##### '
+echo '[!] Starting up traefik, mysql and mailhog.'
+docker-compose up --build -d
 echo '############### Here are the available webshops: ###############'
 
 
@@ -24,6 +26,8 @@ echo \
 if [ "$i" = "$num" ];
 then
     echo '[!] Program shutting down...'
+    docker-compose down
+    echo '[!] Program closed down.'
     exit 0
 fi
 
