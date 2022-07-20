@@ -2,10 +2,17 @@
 #set -x
 
 echo '##### Welcome to the Mollie Webshop Local Environment tool. ##### '
-echo '[!] Starting up traefik, mysql and mailhog.'
-docker-compose up --build -d
-echo '############### Here are the available webshops: ###############'
 
+#Check if master containers already running
+result=$(docker-compose ps --services --filter "status=running")
+if [[ "$result" == *"traefik"* ]] && [[ "$result" == *"mysql"* ]] && [[ "$result" == *"mailhog"* ]] && [[ "$result" == *"phpmyadmin"* ]]; then
+    echo '[!] Traefik, mysql and mailhog are ready to be used.'
+else
+    echo '[!] Starting up traefik, mysql and mailhog.'
+    docker-compose up --build -d
+fi
+
+echo '############### Here are the available webshops: ###############'
 
 cd shops
 array=($(ls -d *))
