@@ -47,7 +47,7 @@ if [ "$num" = "2" ] || [ "$num" = "1" ]; then #Delete files
     docker-compose down -v
     cd ../
 
-    echo '[!] For this to work. Please answer y for each override.'
+    echo '[!] For this to work. Please answer y.'
     rm -rf ./$1
 fi
 
