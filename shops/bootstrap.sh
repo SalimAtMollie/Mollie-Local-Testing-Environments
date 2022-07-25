@@ -37,9 +37,6 @@ echo '[3]: Back'
 read -n1 -r -p "[?] Press a number: " num
 echo \
 
-if [ "$num" = "0" ]; then #Startup Webshop
-    startup $1
-fi
 
 if [ "$num" = "2" ] || [ "$num" = "1" ]; then #Delete files
     #Shut down container
@@ -53,6 +50,9 @@ fi
 
 if [ "$num" = "1" ]; then #Reinstall
     git clone https://github.com/SalimAtMollie/$1xMollie $1 #Download repo from github
+fi
+
+if [ "$num" = "0" ] || [ "$num" = "1" ]; then #Startup Webshop
     startup $1
 fi
 
