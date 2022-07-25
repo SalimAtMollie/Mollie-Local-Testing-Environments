@@ -55,7 +55,7 @@ echo '[1]: Re-install'
 echo '[2]: Delete'
 echo '[3]: Back'
 
-read -n1 -r -p "[?] Press a number: " num
+read -n1 -r -p "${YELLOW}[?] Press a number: ${NC}" num
 echo \
 
 #Read option and act
