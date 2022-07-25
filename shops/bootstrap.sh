@@ -7,12 +7,21 @@ RED=$(tput setaf 1)
 NC=$(tput sgr0)
 
 startup () {
+    echo "${GREEN}[!] Starting up containers...${NC}"
     cd ./$1
     docker-compose up --build
     #When containers are closed by user, re-read this shell script
+    echo "${RED}[!] Going back...${NC}"
     cd ../
     ./bootstrap.sh $1
     exit
+}
+
+shutdown () {
+    echo "${RED}[!] Shutting down containers...${NC}"
+    cd ./$1
+    docker-compose down
+    cd ../
 }
 
 back () {
@@ -62,22 +71,20 @@ echo \
 
 if [ "$num" = "2" ] || [ "$num" = "1" ]; then #Delete files
     #Shut down container
-    cd ./$1
-    docker-compose down -v
-    cd ../
+    shutdown $1
 
+    echo "${RED}[!] Deleting files...${NC}"
     rm -rf ./$1
 fi
 
 if [ "$num" = "1" ]; then #Reinstall
+    echo "${GREEN}[!] Downloading files...${NC}"
     git clone https://github.com/SalimAtMollie/$1xMollie $1 #Download repo from github
 fi
 
 if [ "$num" = "0" ] || [ "$num" = "1" ]; then #Startup/stop Webshop
     if [ "$running" != "" ]; then
-        cd ./$1
-        docker-compose down
-        cd ../
+        shutdown $1
         ./bootstrap.sh $1
     else
         startup $1
