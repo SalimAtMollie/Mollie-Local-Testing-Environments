@@ -7,10 +7,12 @@ RED=$(tput setaf 1)
 NC=$(tput sgr0)
 
 startup () {
-    echo "${GREEN}[!] Starting up containers...${NC}"
-    echo "${YELLOW}[!] TO STOP WEBSHOP, PRESS [CONTROL] + [C] ONCE AT ANY TIME!${NC}"
+    if [ "$2" != "-d" ]; then 
+        echo "${YELLOW}[!] TO STOP WEBSHOP, PRESS [CONTROL] + [C] ONCE AT ANY TIME!${NC}"
+        sleep 2 
+    fi
     cd ./$1
-    docker-compose up --build
+    docker-compose up --build $2
     #When containers are closed by user, re-read this shell script
     echo "${RED}[!] Going back...${NC}"
     cd ../
@@ -31,13 +33,23 @@ back () {
     ./startup.sh
 }
 
+info() {
+    set -o allexport
+    source .env
+    
+    echo "${YELLOW}[!] Webshop URL     : " $DOMAIN
+    echo "${YELLOW}[!] Admin URL       : " $ADMIN_DOMAIN
+    echo "${YELLOW}[!] Admin Username  : " $ADMIN_NAME
+    echo "${YELLOW}[!] Admin Password  : " $ADMIN_PASS ${NC}
+}
+
 
 echo '##### Welcome to the Mollie' $1 'Local Environment tool. ##### '
 
 if [ ! -d ./$1/data ]; #Check if webshop is installed
 then
     echo "${RED}[!]" $1 "is not yet to be installed. Would you like to install and run it?"
-    read -n1 -r -p "${YELLOW}[?] Press y to ${GREEN}confirm,${YELLOW} or n to go ${RED}back${YELLOW}:" response
+    read -n1 -r -p "${YELLOW}[?] Press y to ${GREEN}confirm,${YELLOW} or n to go ${RED}back${YELLOW}:${NC}" response
     echo \
 
     if [ "$response" = "y" ] || [ "$response" = "Y" ]; then
@@ -55,6 +67,7 @@ cd ./$1
 running=$(docker-compose ps --services --filter "status=running")
 if [ "$running" != "" ]; then
     echo "${GREEN}[!]" $1 "is already running${NC}"
+    info
     echo '[0]: Stop webshop'
 else
     echo '[0]: Startup webshop'
@@ -88,7 +101,18 @@ if [ "$num" = "0" ] || [ "$num" = "1" ]; then #Startup/stop Webshop
         shutdown $1
         ./bootstrap.sh $1
     else
-        startup $1
+        echo "${YELLOW}[?] Would you like to run the webshop in the background?: ${NC}"
+        read -n1 -r -p "${YELLOW}[?] Press y to ${GREEN}confirm,${YELLOW} or n to ${RED}decline${YELLOW}:${NC}" detached
+        echo \
+        
+        echo "${GREEN}[!] Starting up containers...${NC}"
+
+        if [ "$detached" = "y" ] || [ "$detached" = "Y" ]; then
+            echo "${YELLOW}[!] IF WEBSITE IS NOT LIVE, PLEASE WAIT AND TRY AGAIN!${NC}"
+            startup $1 -d
+        else
+            startup $1
+        fi
     fi
 fi
 
