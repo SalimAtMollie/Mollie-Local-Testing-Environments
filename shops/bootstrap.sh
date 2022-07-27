@@ -43,6 +43,21 @@ info() {
     echo "${YELLOW}[!] Admin Password  : " $ADMIN_PASS ${NC}
 }
 
+run() {
+    echo "${YELLOW}[?] Would you like to run the webshop in the background?: ${NC}"
+    read -n1 -r -p "${YELLOW}[?] Press y to ${GREEN}confirm,${YELLOW} or n to ${RED}decline${YELLOW}:${NC}" detached
+    echo \
+        
+    echo "${GREEN}[!] Starting up containers...${NC}"
+
+    if [ "$detached" = "y" ] || [ "$detached" = "Y" ]; then
+        startup $1 -d
+        echo "${YELLOW}[!] IF WEBSITE IS NOT LIVE, PLEASE WAIT A FEW MINUTES AND TRY AGAIN!${NC}"
+    else
+        startup $1
+    fi
+}
+
 
 echo '##### Welcome to the Mollie' $1 'Local Environment tool. ##### '
 
@@ -53,8 +68,7 @@ then
     echo \
 
     if [ "$response" = "y" ] || [ "$response" = "Y" ]; then
-        echo "${GREEN}[!] Installing and running" $1 "...${NC}"
-        startup $1
+        run $1
     fi
     back
 fi
@@ -101,18 +115,7 @@ if [ "$num" = "0" ] || [ "$num" = "1" ]; then #Startup/stop Webshop
         shutdown $1
         ./bootstrap.sh $1
     else
-        echo "${YELLOW}[?] Would you like to run the webshop in the background?: ${NC}"
-        read -n1 -r -p "${YELLOW}[?] Press y to ${GREEN}confirm,${YELLOW} or n to ${RED}decline${YELLOW}:${NC}" detached
-        echo \
-        
-        echo "${GREEN}[!] Starting up containers...${NC}"
-
-        if [ "$detached" = "y" ] || [ "$detached" = "Y" ]; then
-            echo "${YELLOW}[!] IF WEBSITE IS NOT LIVE, PLEASE WAIT AND TRY AGAIN!${NC}"
-            startup $1 -d
-        else
-            startup $1
-        fi
+        run $1
     fi
 fi
 
