@@ -8,6 +8,7 @@ NC=$(tput sgr0)
 
 startup () {
     echo "${GREEN}[!] Starting up containers...${NC}"
+    echo "${YELLOW}[!] TO STOP WEBSHOP, PRESS [CONTROL] + [C] ONCE AT ANY TIME!${NC}"
     cd ./$1
     docker-compose up --build
     #When containers are closed by user, re-read this shell script
