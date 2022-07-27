@@ -53,7 +53,6 @@ if [ ! -f ./${webshops[$num]}/docker-compose.yml ]
 then
     echo "${RED}[!]" ${webshops[$num]} "is not downloaded.${NC}"
     read -n1 -r -p "${YELLOW}[?] Would you like to download it?${NC} (${GREEN}y${NC}/${RED}n${NC}): " dwnld
-    echo $dwnld
     if [ "$dwnld" = "y" ] || [ "$dwnld" = "Y" ]; then #Download
         echo "${GREEN}[!] Downloading ${webshops[$num]}...${NC}"
         git clone https://github.com/SalimAtMollie/${webshops[$num]}xMollie ${webshops[$num]} #Download repo from github
