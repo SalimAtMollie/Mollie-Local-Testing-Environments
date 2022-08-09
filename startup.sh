@@ -44,7 +44,7 @@ if [ "$i" = "$num" ]; #No webshop picked - END
 then
     echo "${RED}[!] Program shutting down..."
     docker-compose down
-    echo "[!] Program closed down."
+    echo "${RED}[!] Program closed down."
     exit 0
 fi
 
