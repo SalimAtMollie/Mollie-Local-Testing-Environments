@@ -58,8 +58,9 @@ then
         git clone https://github.com/SalimAtMollie/${webshops[$num]}xMollie ${webshops[$num]} #Download repo from github
     else
         echo "${RED}[!] Going back...${NC}"
-        cd ../../
+        cd ../
         ./startup.sh
+        exit 0
     fi
 fi
 
