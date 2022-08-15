@@ -31,6 +31,7 @@ back () {
     echo "${RED}[!] Going back...${NC}"
     cd ../
     ./startup.sh
+    exit
 }
 
 info() {
