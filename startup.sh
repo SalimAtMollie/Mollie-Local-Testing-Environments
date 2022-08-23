@@ -55,7 +55,7 @@ then
     read -n1 -r -p "${YELLOW}[?] Would you like to download it?${NC} (${GREEN}y${NC}/${RED}n${NC}): " dwnld
     if [ "$dwnld" = "y" ] || [ "$dwnld" = "Y" ]; then #Download
         echo "${GREEN}[!] Downloading ${webshops[$num]}...${NC}"
-        git clone https://github.com/SalimAtMollie/${webshops[$num]}xMollie ${webshops[$num]} #Download repo from github
+        git clone -b TLS https://github.com/SalimAtMollie/${webshops[$num]}xMollie/ ${webshops[$num]} #Download repo from github
     else
         echo "${RED}[!] Going back...${NC}"
         cd ../
