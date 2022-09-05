@@ -8,14 +8,31 @@ NC=$(tput sgr0)
 #Welcome the User
 echo "##### Welcome to the Mollie Webshop Local Environment tool. ##### "
 
+#Open Docker, only if is not running
+if (! docker stats --no-stream >/dev/null); then
+    echo "${RED}[!] Docker is not up. Attempting to start docker. ${NC}"
+    # On Mac OS this would be the terminal command to launch Docker
+    open /Applications/Docker.app
+    echo "${YELLOW}[!] Launching docker.${NC}"
+    # Wait until Docker daemon is running and has completed initialisation
+    while (! docker stats --no-stream >/dev/null); do
+        # Docker takes a few seconds to initialize
+        echo "${YELLOW}[!] Docker is launching... Please wait.${NC}"
+        sleep 20
+    done
+fi
+
+echo "${GREEN}[!] Docker is up and ready to be used.${NC}"
+
 #Check traefik, mysql and mailhog container status.
 result=$(docker-compose ps --services --filter "status=running")
 
+#Are the containers running?
 if [[ "$result" == *"traefik"* ]] \
 && [[ "$result" == *"mysql"* ]] \
 && [[ "$result" == *"mailhog"* ]] \
-&& [[ "$result" == *"phpmyadmin"* ]]; then #Are the containers running?
-    echo "${GREEN}[!] Traefik, mysql and mailhog are ready to be used.${NC}"
+&& [[ "$result" == *"phpmyadmin"* ]]; then 
+    echo "${GREEN}[!] Traefik, mysql and mailhog are ready to be used.${NC}" #Yes = All good to go
 else
     echo "${YELLOW}[!] Starting up traefik, mysql and mailhog.${NC}"
     docker-compose up --build -d #Run traefik, mysql and mailhog containers
